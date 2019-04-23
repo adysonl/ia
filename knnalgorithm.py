@@ -9,7 +9,8 @@ class Flower:
                  sepalwidth = 0,
                  petallength = 0,
                  petalwidth = 0,
-                 label = -1):
+                 label = -1
+):
         self.sepallength = sepallength
         self.sepalwidth = sepalwidth
         self.petallength = petallength
@@ -29,9 +30,9 @@ def get_final_results(test_results):
     file = open("rotulos-teste.txt", "r")
     results = file.readlines()
     file.close()
-    for i in range(len(results)):
+    for i in range(len(results)-1):
         results[i] = results[i][:-1]
-    results.pop()
+    
     results = [float(x) for x in results]
 
     matchs = 0
