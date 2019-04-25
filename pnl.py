@@ -41,21 +41,23 @@ def predict_words(text, sentence, option): #option == 2 ? bigram : option == 3 ?
                     else:
                         next_index = next_words.index(next)
                         probs[next_index] += 1
-    for i in range(3):    
-        if len(probs) > 0:
-            max_prob = max(probs)
-            max_i = probs.index(max_prob)
+    #print(next_words)
+    while len(result) < 3 and len(probs) > 0:
+        signs = '!.?*-:,;!@#$%&/\|+'
+        max_prob = max(probs)
+        max_i = probs.index(max_prob)
+        if next_words[max_i] not in signs:
             result.append([next_words[max_i], max_prob])
 
-            del probs[max_i]
-            del next_words[max_i]
+        del probs[max_i]
+        del next_words[max_i]
     
     return [count, result]
 
 
 
-#target_url = 'http://norvig.com/ngrams/shakespeare.txt'
-target_url = 'https://raw.githubusercontent.com/yurimalheiros/ainotebooks/master/nlp/machadodeassiscorpus.txt'
+target_url = 'http://norvig.com/ngrams/shakespeare.txt'
+#target_url = 'https://raw.githubusercontent.com/yurimalheiros/ainotebooks/master/nlp/machadodeassiscorpus.txt'
 
 words = text_to_list(get_text(target_url))
 word = ''
