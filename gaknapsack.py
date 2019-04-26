@@ -18,7 +18,7 @@
 ################################################################################
 
 from random import sample
-
+from random import randint
 
 class GA(object):
     """
@@ -56,6 +56,12 @@ class GA(object):
         self.generation = self.start_generation()
 
     def create_objects(self):
+        # caso não possam se repetir criar lista p value e weight removendo os escolhidos
+        objects = []
+        while len(objects) < self.n_objects:
+            objects.append({"value": randint(0, self.n_objects), "weight": randint(0, self.max_weight)})
+        print(objects)
+        return objects
         # TODO: este método cria os objetos disponíveis para serem colocados na mochila.
         #
         # Um objeto possui valor e peso e essas informações devem ser representadas como
@@ -69,6 +75,16 @@ class GA(object):
         pass
 
     def start_generation(self):
+        generation = []
+        solution = [0] * self.n_objects
+
+        while len(generation) < self.generation_size:
+            solution = []
+            while len(solution) < self.n_objects:
+                solution.append(randint(0,1))
+            generation.append(solution)
+        print(generation)
+        return generation
         # TODO: este método cria e retorna uma lista com os indivíduos da primeira geração.
         #
         # Nesse problema, os indivíduos são representados como uma lista de 0s e 1s.
@@ -87,6 +103,13 @@ class GA(object):
         pass
 
     def fitness(self, solution):
+        fitness = solution.count(1)
+        solution_weight = self.weight(solution)
+        
+        if solution_weight > self.max_weight:
+            fitness -= (solution_weight - self.max_weight) * self.max_weight_penalty
+
+        return fitness
         # TODO: este método calcula e retorna o fitness de um indivíduo.
         #
         # Um indivíduo é codificado como uma lista de 0s e 1s e o seu fitness é
@@ -101,12 +124,23 @@ class GA(object):
         pass
 
     def weight(self, solution):
+        solution_weight = 0
+        
+        for i in range(len(solution)):
+            if solution[i] == 1:
+                solution_weight += self.objects[i]["weight"]
+        return solution_weight
         # TODO: este método calcula e retorna o peso total de um indivíduo.
         #
         # O parâmetro solution é o indivíduo que terá seu peso calculado.
         pass
 
     def recombine(self, parent1, parent2):
+        print(parent1)
+        solution1 = parent1[0:self.crossover_point] + parent2[self.crossover_point:]
+        solution2 = parent2[0:self.crossover_point] + parent1[self.crossover_point:]
+
+        return [solution1, solution2]
         # TODO: este método faz a recombinação de 1 ponto dos pais passados como
         # parâmetro (parent1 e parent2). O ponto de corte é especificado pelo
         # parâmetro crossover_point passado no construtor.
@@ -116,6 +150,14 @@ class GA(object):
         pass
 
     def compete(self, solutions):
+        fitness = []
+        for solution in solutions:
+            fitness.append(self.fitness(solution))
+        
+        max_fitness = max(fitness)
+        max_i = fitness.index(max_fitness)
+
+        return solutions[max_i]
         # TODO: na seleção por torneio, um conjunto de indivíduos disputa um torneio
         # e apenas o de maior fitness é selecionado. Este método recebe uma lista
         # de indivíduos (parâmetro solutions) e retorna o indivíduo de maior fitness.
