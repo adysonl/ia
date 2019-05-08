@@ -72,7 +72,6 @@ class GA(object):
         # Por fim, este método deve retornar uma lista com todos os objetos criados.
         # Lembre-se que o número de objetos que deve ser criado está especificado no
         # construtor.
-        pass
 
     def start_generation(self):
         generation = []
@@ -83,7 +82,6 @@ class GA(object):
             while len(solution) < self.n_objects:
                 solution.append(randint(0,1))
             generation.append(solution)
-        print(generation)
         return generation
         # TODO: este método cria e retorna uma lista com os indivíduos da primeira geração.
         #
@@ -100,14 +98,18 @@ class GA(object):
         # Na primeira geração, os indivíduos são criados aleatoriamente.
         # Lembre-se que a quantidade de objetos e o tamanho da geração são especificados
         # no construtor.
-        pass
 
     def fitness(self, solution):
-        fitness = solution.count(1)
-        solution_weight = self.weight(solution)
+        fitness = 0
+        for i in range(self.n_objects):
+            if solution[i] == 1:
+                fitness += self.objects[i]["value"]
         
+        solution_weight = self.weight(solution)
+
         if solution_weight > self.max_weight:
-            fitness -= (solution_weight - self.max_weight) * self.max_weight_penalty
+            penalty = (solution_weight - self.max_weight) * self.max_weight_penalty
+            fitness -= penalty
 
         return fitness
         # TODO: este método calcula e retorna o fitness de um indivíduo.
@@ -121,7 +123,6 @@ class GA(object):
         # (peso total dos objetos - peso total suportado)*max_weight_penalty
         #
         # O parâmetro solution é o indivíduo que terá seu fitness calculado.
-        pass
 
     def weight(self, solution):
         solution_weight = 0
@@ -133,10 +134,8 @@ class GA(object):
         # TODO: este método calcula e retorna o peso total de um indivíduo.
         #
         # O parâmetro solution é o indivíduo que terá seu peso calculado.
-        pass
 
     def recombine(self, parent1, parent2):
-        print(parent1)
         solution1 = parent1[0:self.crossover_point] + parent2[self.crossover_point:]
         solution2 = parent2[0:self.crossover_point] + parent1[self.crossover_point:]
 
@@ -147,7 +146,6 @@ class GA(object):
         #
         # Após efetuar a recombinação, o método retorna uma lista com os dois
         # filhos gerados.
-        pass
 
     def compete(self, solutions):
         fitness = []
@@ -161,7 +159,6 @@ class GA(object):
         # TODO: na seleção por torneio, um conjunto de indivíduos disputa um torneio
         # e apenas o de maior fitness é selecionado. Este método recebe uma lista
         # de indivíduos (parâmetro solutions) e retorna o indivíduo de maior fitness.
-        pass
 
     def next_generation(self):
         """
